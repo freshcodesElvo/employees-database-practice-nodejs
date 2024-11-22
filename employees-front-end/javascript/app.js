@@ -21,6 +21,7 @@ const get_employees = async () => {
 };
 
 const display_employees = async()=>{
+    document.querySelector(".company-employees").innerHTML = ""
     const response = await fetch('http://localhost:4000/api/v1/employees')
     const data = await response.json()
     console.log(data.employees_list)
@@ -35,6 +36,9 @@ const display_employees = async()=>{
         <th>national_id</th>
         <th>bank_account_number</th>
         <th>bank_name</th>
+          <th>Controls</th>
+        
+        
         `       
         employeeTable.appendChild(header_row)
 
@@ -47,8 +51,23 @@ const display_employees = async()=>{
               <td>${employee.national_id}</td> 
               <td>${employee.bank_account_number}</td> 
               <td>${employee.bank_name}</td> 
+              <td><button class="btn btn-primary">Edit</button>  <button class="btn btn-primary delete-employee-btn" style= "margin-left: 1em">Delete</button></td> 
 
             `
+            const delete_employee_btn =  data_row.querySelector(".delete-employee-btn")
+
+            delete_employee_btn.addEventListener("click",  async()=>{
+                console.log(`deleting ${employee.first_name}...`)
+                const response = await fetch(`http://localhost:4000/api/v1/employees/${employee._id}`,{
+                    method: 'DELETE'
+                })
+                if(response.ok){
+                    console.log(`deleting......${employee.first_name}`)
+                    alert(` ${employee.first_name} deleted succesfully`)
+                    display_employees()
+
+                }
+            })
             employeeTable.appendChild(data_row)
         })
         document.querySelector(".company-employees").appendChild(employeeTable)
@@ -63,7 +82,6 @@ const create_employee = async () => {
         const first_name= document.getElementById("first-name-input").value;
         const second_name = document.getElementById("second-name-input").value;
         const employee_id = document.getElementById("employee-id").value;
-   
         const national_id = document.getElementById("national-id").value;
         const role = document.getElementById("role").value;
         const bank_account_number = document.getElementById("bank-account").value;
@@ -108,3 +126,4 @@ submit_btn.addEventListener('click', () => {
     console.log('clicked');
     create_employee();
 });
+
