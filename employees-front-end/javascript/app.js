@@ -51,10 +51,11 @@ const display_employees = async()=>{
               <td>${employee.national_id}</td> 
               <td>${employee.bank_account_number}</td> 
               <td>${employee.bank_name}</td> 
-              <td><button class="btn btn-primary">Edit</button>  <button class="btn btn-primary delete-employee-btn" style= "margin-left: 1em">Delete</button></td> 
+              <td><button class="btn btn-primary edit-employee-btn">Edit</button>  <button class="btn btn-primary delete-employee-btn" style= "margin-left: 1em">Delete</button></td> 
 
             `
             const delete_employee_btn =  data_row.querySelector(".delete-employee-btn")
+            const edit_employee_btn =  data_row.querySelector(".edit-employee-btn")
 
             delete_employee_btn.addEventListener("click",  async()=>{
                 console.log(`deleting ${employee.first_name}...`)
@@ -66,6 +67,20 @@ const display_employees = async()=>{
                     alert(` ${employee.first_name} deleted succesfully`)
                     display_employees()
 
+                }
+            })
+
+            
+            edit_employee_btn.addEventListener("click", async()=>{
+                console.log(`editing ${employee.first_name}`)
+                const response = await fetch(`http://localhost:4000/api/v1/employees/${employee._id}`,{
+                    method:'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(create_employee),
+                })
+                if(response.ok){
+                    const update_employee = await response.json()
+                   
                 }
             })
             employeeTable.appendChild(data_row)
